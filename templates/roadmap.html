@@ -1,0 +1,318 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+/* ---------- PAGE ---------- */
+.roadmap-page {
+    max-width: 1100px;
+    margin: auto;
+    padding: 40px 20px;
+}
+
+.page-title {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.page-title h1 {
+    font-size: 36px;
+    font-weight: 700;
+}
+
+.page-title p {
+    color: #6b7280;
+}
+
+/* ---------- TARGET CAREER ---------- */
+.target-card {
+    background: linear-gradient(135deg, #eef2ff, #f8fafc);
+    border-radius: 18px;
+    padding: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.target-info h2 {
+    margin: 0;
+    font-size: 22px;
+}
+
+.target-info p {
+    color: #6b7280;
+}
+
+.match-pill {
+    background: #2563eb;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-weight: 600;
+}
+
+/* ---------- TIMELINE ---------- */
+.timeline {
+    margin-top: 50px;
+    position: relative;
+}
+
+.timeline::before {
+    content: "";
+    position: absolute;
+    left: 22px;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: #e5e7eb;
+}
+
+/* ---------- SECTION ---------- */
+.roadmap-section {
+    margin-bottom: 60px;
+    position: relative;
+    padding-left: 70px;
+}
+
+.section-icon {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 46px;
+    height: 46px;
+    background: #4f46e5;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.section-header h3 {
+    margin: 0;
+}
+
+.section-header span {
+    color: #6b7280;
+}
+
+/* ---------- TASK CARD ---------- */
+.task-card {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-top: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.04);
+}
+
+.task-left {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+}
+
+.task-icon {
+    font-size: 18px;
+    color: #2563eb;
+}
+
+.task-text {
+    font-weight: 500;
+}
+
+.badges {
+    margin-top: 6px;
+}
+
+.badge {
+    display: inline-block;
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    margin-right: 6px;
+}
+
+.badge-category {
+    background: #f3f4f6;
+}
+
+.badge-high {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.badge-medium {
+    background: #ede9fe;
+    color: #6d28d9;
+}
+
+.badge-low {
+    background: #e0f2fe;
+    color: #0369a1;
+}
+
+/* ---------- RESOURCES ---------- */
+.resources {
+    margin-top: 70px;
+}
+
+.resource-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.resource-card {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+
+.resource-card h4 {
+    margin: 10px 0 4px;
+}
+.resources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.resource-card {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 16px;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.resource-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 35px rgba(0,0,0,0.1);
+}
+
+.resource-card .icon {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+</style>
+
+<div class="roadmap-page">
+
+    <!-- HEADER -->
+    <div class="page-title">
+        <h1>Your Career Roadmap</h1>
+        <p>Step-by-step preparation plan to become a {{ roadmap.target.name }}</p>
+    </div>
+
+    <!-- TARGET CAREER -->
+    <div class="target-card">
+        <div class="target-info">
+            <h2>Target Career: {{ roadmap.target.name }}</h2>
+            <p>{{ roadmap.target.domain }}</p>
+        </div>
+        <div class="match-pill">
+            {{ roadmap.target.match }}% Match
+        </div>
+    </div>
+
+    <!-- TIMELINE -->
+    <div class="timeline">
+
+        {% for section in roadmap.sections %}
+        <div class="roadmap-section">
+            <div class="section-icon">{{ loop.index }}</div>
+
+            <div class="section-header">
+                <h3>{{ section.title }}</h3>
+                <span>{{ section.duration }} • {{ section.tasks|length }} Tasks</span>
+            </div>
+
+            {% for task in section.tasks %}
+            <div class="task-card">
+                <div class="task-left">
+                    <div class="task-icon">✔</div>
+                    <div>
+                        <div class="task-text">{{ task.text }}</div>
+                        <div class="badges">
+                            <span class="badge badge-category">{{ task.category }}</span>
+
+                            {% if task.priority == "High" %}
+                                <span class="badge badge-high">High Priority</span>
+                            {% elif task.priority == "Medium" %}
+                                <span class="badge badge-medium">Medium Priority</span>
+                            {% else %}
+                                <span class="badge badge-low">Low Priority</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div>✓</div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+
+    </div>
+
+    <!-- RESOURCES -->
+    <section class="resources-section">
+    <h2>📚 Recommended Resources</h2>
+
+    <div class="resources-grid">
+
+        <a href="https://leetcode.com"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="resource-card">
+            <div class="icon">{"</>"}</div>
+            <h4>LeetCode</h4>
+            <p>Coding practice & problem solving</p>
+        </a>
+
+        <a href="https://www.coursera.org"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="resource-card">
+            <div class="icon">🎓</div>
+            <h4>Coursera</h4>
+            <p>Online courses & certifications</p>
+        </a>
+
+        <a href="https://www.linkedin.com/learning/"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="resource-card">
+            <div class="icon">👔</div>
+            <h4>LinkedIn Learning</h4>
+            <p>Professional & soft skills</p>
+        </a>
+
+        <a href="https://github.com"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="resource-card">
+            <div class="icon">🐙</div>
+            <h4>GitHub</h4>
+            <p>Portfolio & open-source projects</p>
+        </a>
+
+    </div>
+</section>
+
+
+{% endblock %}

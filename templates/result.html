@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Career Analysis Result</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    
+<!-- ================= NAVBAR ================= -->
+<div class="result-navbar">
+
+    <!-- Left -->
+    <div class="nav-left">
+        <a href="/form" class="back-link">← Back to Form</a>
+    </div>
+
+    
+
+    <!-- Center -->
+    <div class="nav-center">
+        <div class="nav-item active">🏅 Overview</div>
+        <div class="nav-item">🎯 Career Paths</div>
+        <div class="nav-item">📊 Skills Analysis</div>
+        <div class="nav-item">💪 Strengths</div>
+        <div class="nav-item">🗺 Roadmap</div>
+        <div class="nav-item">🤖 AI Insights</div>
+    </div>
+
+    <!-- Right -->
+    <div class="nav-right">
+        <button class="what-if-btn">📄 What-If</button>
+    </div>
+
+</div>
+
+<div class="result-page">
+    
+
+    <!-- TOP ICON -->
+    <div class="result-icon">
+        🏅
+    </div>
+
+    <!-- HEADER -->
+    <h1 class="result-title">Career Analysis Complete</h1>
+    <p class="result-subtitle">
+        Based on Random Forest analysis of your profile, we've identified your optimal career paths
+    </p>
+
+    <!-- STUDENT PROFILE SUMMARY -->
+    <div class="profile-box">
+        <h2>👤 Student Profile Summary</h2>
+
+        <div class="profile-grid">
+            <div class="profile-item">
+                <span>Name</span>
+                <strong>{{ student_name }}</strong>
+            </div>
+
+            <div class="profile-item">
+                <span>CGPA</span>
+                <strong>{{ gpa }}</strong>
+            </div>
+
+            <div class="profile-item">
+                <span>Internship</span>
+                <strong>{{ internship_months }} months</strong>
+            </div>
+
+            <div class="profile-item">
+                <span>Coding Practice</span>
+                <strong>{{ coding_hours }} hrs/week</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOP CAREER BANNER -->
+<!-- TOP CAREER PATH -->
+<div class="top-career-hero">
+    <p class="hero-label">Top Recommended Career Path</p>
+
+    <h1 class="hero-title">{{ career }}</h1>
+
+    <p class="hero-domain">
+        📈 {{ domain }}
+    </p>
+
+    <div class="hero-pill">
+        <span>Success Probability</span>
+        <strong>{{ confidence }}%</strong>
+    </div>
+
+    <p class="hero-desc">
+        {{ career_description }}
+    </p>
+</div>
+
+
+    <!-- TOP 3 CAREERS -->
+    <div class="top3-section">
+        <div class="top3-grid">
+            {% for c in top_careers %}
+            <div class="top3-card {% if loop.index == 1 %}top{% endif %}">
+                <div class="rank-badge">#{{ loop.index }}</div>
+                <div class="percent">{{ c.prob }}%</div>
+                <h3>{{ c.name }}</h3>
+                <p>{{ c.domain }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="skill-gap-card">
+    <h3>Skill Gap Analysis</h3>
+
+<!-- SKILL GAP ANALYSIS -->
+<div class="skill-gap-simple">
+    <h3>Skill Gap Analysis</h3>
+
+    {% if gaps %}
+        <ul>
+            {% for skill, value in gaps.items() %}
+                <li>
+                    <strong>{{ skill.replace('_',' ').title() }}</strong>
+                    <span>Improve by {{ value }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="no-gap">You are well prepared 🎉</p>
+    {% endif %}
+</div>
+
+    <!-- CTA -->
+    <a href="/form" class="cta-btn">
+        Explore Career Paths in Detail →
+    </a>
+
+</div>
+
+</body>
+</html>

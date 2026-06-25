@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ career.name }}</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+{% include "components/navbar.html" %}
+
+<div class="career-detail">
+
+    <h1>{{ career.name }}</h1>
+    <p class="career-domain">{{ career.domain }}</p>
+
+    <div class="stats">
+        <div>₹{{ career.salary }}</div>
+        <div>{{ career.growth }} Growth</div>
+        <div>{{ career.match }}% Match</div>
+    </div>
+
+    <h3>Key Responsibilities</h3>
+    <ul>
+        {% for r in career.responsibilities %}
+        <li>✔ {{ r }}</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Job Outlook</h3>
+    <p>{{ career.outlook }}</p>
+
+</div>
+
+</body>
+</html>

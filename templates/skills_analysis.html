@@ -1,0 +1,287 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% if not skills %}
+    <div style="text-align:center; padding:40px;">
+        <h3>Skills analysis not available</h3>
+        <p>Please submit the form to generate skill analysis.</p>
+    </div>
+{% else %}
+
+<style>
+.page-header {
+    text-align: center;
+    margin: 40px 0;
+}
+
+.page-header h1 {
+    font-size: 34px;
+}
+
+.page-header p {
+    color: #6b7280;
+}
+
+.container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* Overall Card */
+.overall-card {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    /* background: #ffffff; */
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+}
+
+.circle {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    border: 10px solid #4f46e5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.circle span {
+    font-size: 34px;
+    color: #4f46e5;
+}
+
+.section-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 30px;
+}
+
+.skill {
+    margin-bottom: 18px;
+}
+
+.skill-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.bar {
+    height: 10px;
+    background: #e5e7eb;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.fill {
+    height: 100%;
+    background: linear-gradient(90deg, #6366f1, #3b82f6);
+}
+/* ================= RADAR CARD ================= */
+.radar-card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 30px;
+  margin: 40px 0;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+}
+
+.radar-header h3 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.radar-header p {
+  margin-top: 6px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.radar-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+}
+
+#skillRadarChart {
+  max-width: 420px;
+  max-height: 420px;
+}
+
+</style>
+
+<div class="page-header">
+    <h1>Skills Profile Analysis</h1>
+    <p>Comprehensive breakdown of your competencies and skill levels</p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="container">
+
+    <div class="radar-card">
+  <div class="radar-header">
+    <h3>⭐ Skill Radar Visualization</h3>
+    <p>Visual representation of your competency distribution</p>
+  </div>
+
+  <div class="radar-wrapper">
+    <canvas id="skillRadarChart"></canvas>
+  </div>
+</div>
+
+
+    <!-- OVERALL -->
+    <div class="overall-card">
+        <div class="circle">
+            <span>{{ skills.overall_score }}</span>
+            Overall
+        </div>
+        <div>
+            <h2>
+                Overall Skill Rating:
+                <span style="color:#4f46e5">{{ skills.overall_label }}</span>
+            </h2>
+            <p>Your average skill score across all competencies.</p>
+        </div>
+    </div>
+
+    <!-- SKILLS -->
+    <div class="grid">
+
+        <!-- TECHNICAL -->
+        <div class="section-card">
+            <h3>Core Technical Skills</h3>
+
+            {% if skills.technical_skills %}
+                {% for skill, value in skills.technical_skills.items() %}
+                <div class="skill">
+                    <div class="skill-header">
+                        <strong>{{ skill }}</strong>
+                        <span>{{ value }}%</span>
+                    </div>
+                    <div class="bar">
+                        <div class="fill" style="width: {{ value }}%"></div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <!-- SOFT SKILLS -->
+        <div class="section-card">
+            <h3>Soft Skills</h3>
+
+            {% if skills.soft_skills %}
+                {% for skill, value in skills.soft_skills.items() %}
+                <div class="skill">
+                    <div class="skill-header">
+                        <strong>{{ skill }}</strong>
+                        <span>{{ value }}%</span>
+                    </div>
+                    <div class="bar">
+                        <div class="fill" style="width: {{ value }}%"></div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+<script>
+const radarData = {
+  labels: [
+    "Technical",
+    "Aptitude",
+    "Problem Solving",
+    "Communication",
+    "Leadership",
+    "Teamwork"
+  ],
+  datasets: [{
+    label: "Skill Level",
+    data: [
+      {{ skills.technical_skills["Technical Skills"] }},
+      {{ skills.technical_skills["Aptitude"] }},
+      {{ skills.technical_skills["Problem Solving"] }},
+      {{ skills.soft_skills["Communication"] }},
+      {{ skills.soft_skills["Leadership"] }},
+      {{ skills.soft_skills["Teamwork"] }}
+    ],
+    fill: true,
+    backgroundColor: "rgba(37, 99, 235, 0.25)",
+    borderColor: "#2563eb",
+    pointBackgroundColor: "#2563eb",
+    pointBorderColor: "#fff",
+    pointHoverBackgroundColor: "#fff",
+    pointHoverBorderColor: "#2563eb",
+    borderWidth: 2
+  }]
+};
+
+const radarConfig = {
+  type: "radar",
+  data: radarData,
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      r: {
+        min: 0,
+        max: 100,
+        ticks: {
+          stepSize: 25,
+          showLabelBackdrop: false,
+          color: "#6b7280"
+        },
+        grid: {
+          color: "#e5e7eb"
+        },
+        angleLines: {
+          color: "#e5e7eb"
+        },
+        pointLabels: {
+          color: "#111827",
+          font: {
+            size: 13,
+            weight: "600"
+          }
+        }
+      }
+    },
+    plugins: {
+      legend: {
+        display: false
+      },
+      tooltip: {
+        callbacks: {
+          label: (ctx) => `${ctx.label}: ${ctx.raw}%`
+        }
+      }
+    }
+  }
+};
+
+new Chart(
+  document.getElementById("skillRadarChart"),
+  radarConfig
+);
+
+</script>
+
+{% endif %}
+{% endblock %}

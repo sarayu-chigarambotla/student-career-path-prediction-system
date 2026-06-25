@@ -1,0 +1,469 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+.ai-container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 40px 20px;
+}
+
+.ai-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.ai-header h1 {
+    font-size: 34px;
+}
+
+.ai-header p {
+    color: #6b7280;
+    margin-top: 8px;
+}
+
+/* Model Card */
+.model-card {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    background: linear-gradient(135deg, #eef2ff, #f8fafc);
+    padding: 28px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.model-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #6366f1, #3b82f6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    color: white;
+}
+
+.model-tags span {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: white;
+    margin-right: 8px;
+    font-size: 13px;
+    border: 1px solid #e5e7eb;
+}
+
+/* Top Factors */
+.factor-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 40px;
+}
+
+.factor-card {
+    background: white;
+    padding: 26px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    text-align: center;
+}
+
+.factor-rank {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #eef2ff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-bottom: 14px;
+}
+
+.impact {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+}
+
+.high { background: #dcfce7; color: #166534; }
+.medium { background: #ede9fe; color: #5b21b6; }
+.low { background: #f1f5f9; color: #334155; }
+
+/* Contribution */
+.contribution {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    margin-top: 40px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+
+.row {
+    margin-bottom: 16px;
+}
+
+.bar {
+    height: 10px;
+    background: #e5e7eb;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.fill {
+    height: 100%;
+    background: linear-gradient(90deg, #6366f1, #3b82f6);
+}
+
+/* How it works */
+.steps {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 24px;
+    margin-top: 40px;
+}
+
+.step {
+    background: white;
+    padding: 24px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+
+/* Transparency */
+.transparency {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 24px;
+    margin-top: 40px;
+}
+
+.box {
+    background: #f8fafc;
+    padding: 22px;
+    border-radius: 16px;
+}
+.card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 32px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+}
+
+.section-title {
+    font-size: 22px;
+    margin-bottom: 20px;
+}
+
+.grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.info-box {
+    display: flex;
+    gap: 14px;
+    padding: 18px;
+    border-radius: 14px;
+    background: #f9fafb;
+}
+
+.info-box h4 {
+    margin: 0 0 6px 0;
+}
+
+.info-box p {
+    margin: 0;
+    color: #6b7280;
+}
+
+.icon.success {
+    color: #22c55e;
+    font-size: 20px;
+    margin-top: 2px;
+}
+
+.disclaimer {
+    background: #f8fbff;
+    border: 1px solid #dbeafe;
+}
+
+.disclaimer p {
+    color: #475569;
+    line-height: 1.7;
+}
+
+.responsible-ai {
+    margin-top: 18px;
+    padding: 16px;
+    border-radius: 12px;
+    background: #eef6ff;
+    font-size: 14px;
+    color: #334155;
+}
+.prediction-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 28px;
+    margin-top: 20px;
+}
+
+.step {
+    background: #ffffff;
+    padding: 22px;
+    border-radius: 16px;
+}
+
+.step h4 {
+    margin: 12px 0 8px;
+    font-size: 18px;
+}
+
+.step p {
+    margin: 0;
+    color: #64748b;
+    line-height: 1.6;
+}
+
+.step-badge {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 18px;
+}
+
+/* Badge Colors */
+.step-badge.blue {
+    background: #eaf2ff;
+    color: #2563eb;
+}
+
+.step-badge.purple {
+    background: #f3e8ff;
+    color: #9333ea;
+}
+
+.step-badge.green {
+    background: #e8f9ee;
+    color: #22c55e;
+}
+.card {
+    margin-bottom: 40px;
+}
+
+.section-spacer {
+    height: 24px;
+}
+
+
+</style>
+
+<div class="ai-container">
+
+    <!-- HEADER -->
+    <div class="ai-header">
+        <h1>AI Insights & Explainability</h1>
+        <p>Understand how the Random Forest model made its predictions</p>
+    </div>
+
+    <!-- MODEL CARD -->
+    <div class="model-card">
+        <div class="model-icon">🧠</div>
+        <div>
+            <h2>Random Forest Classifier</h2>
+            <p>
+                An ensemble machine learning model combining multiple decision trees
+                to evaluate your academic and skill profile.
+            </p>
+            <div class="model-tags">
+                <span>Ensemble Method</span>
+                <span>High Accuracy</span>
+                <span>Interpretable</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOP FACTORS -->
+    <div class="factor-grid">
+        <div class="factor-card">
+            <div class="factor-rank">#1</div>
+            <h3>Technical Score</h3>
+            <p>Top contributing factor</p>
+            <span class="impact high">HIGH Impact</span>
+        </div>
+
+        <div class="factor-card">
+            <div class="factor-rank">#2</div>
+            <h3>Problem Solving</h3>
+            <p>Strong influence</p>
+            <span class="impact medium">MEDIUM Impact</span>
+        </div>
+
+        <div class="factor-card">
+            <div class="factor-rank">#3</div>
+            <h3>Aptitude</h3>
+            <p>Moderate influence</p>
+            <span class="impact medium">MEDIUM Impact</span>
+        </div>
+    </div>
+
+    <!-- CONTRIBUTION -->
+    <div class="contribution">
+        <h2>Feature Contribution Analysis</h2>
+
+        <div class="row">
+            <strong>Technical Skills</strong>
+            <div class="bar"><div class="fill" style="width:90%"></div></div>
+        </div>
+
+        <div class="row">
+            <strong>Problem Solving</strong>
+            <div class="bar"><div class="fill" style="width:75%"></div></div>
+        </div>
+
+        <div class="row">
+            <strong>Aptitude</strong>
+            <div class="bar"><div class="fill" style="width:65%"></div></div>
+        </div>
+
+        <div class="row">
+            <strong>Communication</strong>
+            <div class="bar"><div class="fill" style="width:40%"></div></div>
+        </div>
+    </div>
+
+    <div class="section-spacer"></div>
+
+<!-- HOW THE PREDICTION WORKS -->
+<div class="card">
+    <h2 class="section-title">
+        💡 How the Prediction Works
+    </h2>
+
+    <div class="prediction-steps">
+        <!-- Step 1 -->
+        <div class="step">
+            <div class="step-badge blue">1</div>
+            <h4>Data Collection</h4>
+            <p>
+                Your profile data (CGPA, skills, experience, etc.) is
+                collected and normalized for analysis.
+            </p>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step">
+            <div class="step-badge purple">2</div>
+            <h4>Feature Analysis</h4>
+            <p>
+                Multiple decision trees analyze different aspects
+                of your profile independently.
+            </p>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step">
+            <div class="step-badge green">3</div>
+            <h4>Ensemble Voting</h4>
+            <p>
+                Trees vote on career paths, and the majority
+                consensus determines the final prediction.
+            </p>
+        </div>
+    </div>
+</div>
+
+
+<!-- MODEL TRANSPARENCY -->
+<div class="card">
+    <h2 class="section-title">
+        🛡️ Model Transparency
+    </h2>
+
+    <div class="grid-2">
+        <div class="info-box">
+            <span class="icon success">✔</span>
+            <div>
+                <h4>No Hidden Bias</h4>
+                <p>
+                    Predictions are based solely on academic and professional attributes.
+                </p>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <span class="icon success">✔</span>
+            <div>
+                <h4>Interpretable Results</h4>
+                <p>
+                    You can see exactly which features influenced your prediction.
+                </p>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <span class="icon success">✔</span>
+            <div>
+                <h4>Data Privacy</h4>
+                <p>
+                    Your data is processed locally and not stored permanently.
+                </p>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <span class="icon success">✔</span>
+            <div>
+                <h4>Continuous Improvement</h4>
+                <p>
+                    Model is designed for future enhancement with real placement data.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- IMPORTANT DISCLAIMER -->
+<div class="card disclaimer">
+    <h2 class="section-title">
+        ℹ️ Important Disclaimer
+    </h2>
+
+    <p>
+        This career prediction is generated using a
+        <strong>Random Forest machine learning model</strong> for
+        <strong>advisory purposes only</strong>.
+        The results should be considered as guidance rather than definitive career decisions.
+    </p>
+
+    <p>
+        Individual success depends on many factors including personal interests,
+        market conditions, and continuous learning.
+        We encourage you to explore multiple career paths and consult
+        career counselors for comprehensive guidance.
+    </p>
+
+    <div class="responsible-ai">
+        🛡️ <strong>Responsible AI:</strong>
+        This prediction does not use sensitive personal attributes such as
+        gender, race, religion, or socioeconomic background.
+        All predictions are based solely on academic performance,
+        skills, and professional experience.
+    </div>
+</div>
+
+
+</div>
+
+{% endblock %}

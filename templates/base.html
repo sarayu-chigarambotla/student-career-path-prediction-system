@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>{{ title if title else "Career Prediction" }}</title>
+
+<style>
+/* ================= THEME VARIABLES ================= */
+:root {
+  --bg-main: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-muted: #f1f5f9;
+
+  --text-main: #111827;
+  --text-muted: #000000;
+  --text-execute: #000000;
+
+  --border-color: #e5e7eb;
+
+  --primary: #2563eb;
+  --secondary: #9333ea;
+--card-title: #0f172a;
+--card-text: #475569;
+
+  --shadow: 0 12px 30px rgba(0,0,0,0.06);
+}
+
+/* ================= DARK MODE ================= */
+body.dark-mode {
+
+  background: radial-gradient(
+    1200px circle at top center,
+    #1e293b 0%,
+    #020617 55%,
+    #020617 100%
+  );
+
+
+  --bg-main: #0f172a;
+  --bg-card: #020617;
+  --bg-muted: #1e293b;
+
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+
+  --border-color: #334155;
+
+  --primary: #60a5fa;
+  --secondary: #a78bfa;
+
+  --shadow: 0 12px 30px rgba(0,0,0,0.6);
+}
+
+/* ================= BASE ================= */
+body {
+  margin: 0;
+  font-family: "Segoe UI", sans-serif;
+  background: var(--bg-main);
+  color: var(--text-main);
+}
+
+/* ================= NAVBAR ================= */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 32px;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.nav-left a {
+  text-decoration: none;
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.nav-center {
+  display: flex;
+  gap: 18px;
+}
+
+.nav-center a {
+  text-decoration: none;
+  color: var(--text-muted);
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 12px;
+}
+
+.nav-center a.active {
+  background: var(--primary);
+  color: white;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+}
+
+/* ================= BUTTONS ================= */
+.whatif-btn {
+  padding: 8px 16px;
+  border-radius: 10px;
+  background: #eef2ff;
+  color: #4f46e5;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid #c7d2fe;
+  transition: all 0.2s ease;
+}
+
+.whatif-btn:hover {
+  background: #4f46e5;
+  color: white;
+}
+
+.theme-toggle {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 18px;
+  transition: all 0.2s ease;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.05);
+}
+
+/* ================= PAGE CONTENT ================= */
+.page-content {
+  padding: 40px 20px;
+}
+
+/* ================= COMMON CARDS ================= */
+.career-card,
+.modal-card,
+.radar-card,
+.resource-card,
+.task-card,
+.info-card {
+  background: var(--bg-card);
+  box-shadow: var(--shadow);
+}
+
+/* ================= TEXT ================= */
+p {
+  color: var(--text-execute);
+}
+
+span {
+  color: var(--text-muted);
+}
+
+h1, h2, h3, h4 {
+  color: var(--text-main);
+}
+
+/* ================= MODAL DARK ================= */
+body.dark-mode .career-modal {
+  background: rgba(0,0,0,0.7);
+}
+
+body.dark-mode .career-modal-content {
+  background: var(--bg-card);
+  color: var(--text-main);
+}
+
+body.dark-mode .modal-tabs {
+  background: var(--bg-muted);
+}
+
+body.dark-mode .tab {
+  color: var(--text-muted);
+}
+
+body.dark-mode .tab.active {
+  background: var(--bg-card);
+  color: var(--text-main);
+}
+
+/* ================= CARD TITLE COLOR FIX (DARK MODE) ================= */
+
+/* Keep card titles dark even in dark mode */
+body.dark-mode .career-card h1,
+body.dark-mode .career-card h2,
+body.dark-mode .career-card h3,
+body.dark-mode .career-card h4,
+
+body.dark-mode .modal-card h1,
+body.dark-mode .modal-card h2,
+body.dark-mode .modal-card h3,
+body.dark-mode .modal-card h4,
+
+body.dark-mode .resource-card h1,
+body.dark-mode .resource-card h2,
+body.dark-mode .resource-card h3,
+body.dark-mode .resource-card h4,
+
+body.dark-mode .task-card h1,
+body.dark-mode .task-card h2,
+body.dark-mode .task-card h3,
+body.dark-mode .task-card h4,
+
+
+
+
+body.dark-mode .profile-box h2,
+body.dark-mode .top3-card h3,
+body.dark-mode .skill-gap-card h3,
+body.dark-mode .ai-card h3,
+body.dark-mode .insight-card h3 {
+  color: var(--text-main);
+}
+
+
+
+
+body.dark-mode .info-card h1,
+body.dark-mode .info-card h2,
+body.dark-mode .info-card h3,
+body.dark-mode .info-card h4 {
+  color: #0f172a; /* dark slate for card titles */
+}
+
+/* Softer text inside cards */
+body.dark-mode .career-card p,
+body.dark-mode .modal-card p,
+body.dark-mode .resource-card p,
+body.dark-mode .task-card p,
+body.dark-mode .info-card p {
+--card-title: #0f172a;   /* KEEP DARK */
+--card-text: #475569;    /* KEEP MUTED */
+  color: #475569;
+}
+
+/* ================= GLOBAL CARD TEXT FIX ================= */
+
+/* Any element that visually looks like a card */
+.career-card,
+.modal-card,
+.resource-card,
+.task-card,
+.info-card,
+.profile-box,
+.top-career-hero,
+.top3-card,
+.skill-gap-card,
+.insight-card,
+.ai-card {
+  color: var(--card-text);
+}
+
+/* Card headings MUST stay dark in both modes */
+.career-card h1, .career-card h2, .career-card h3, .career-card h4,
+.modal-card h1, .modal-card h2, .modal-card h3, .modal-card h4,
+.resource-card h1, .resource-card h2, .resource-card h3, .resource-card h4,
+.task-card h1, .task-card h2, .task-card h3, .task-card h4,
+.info-card h1, .info-card h2, .info-card h3, .info-card h4,
+.profile-box h1, .profile-box h2, .profile-box h3, .profile-box h4,
+.top-career-hero h1, .top-career-hero h2, .top-career-hero h3,
+.top3-card h3,
+.skill-gap-card h3,
+.insight-card h3,
+.ai-card h3 {
+  color: var(--card-title);
+}
+
+
+/* ================= GLOBAL DARK MODE FIX ================= */
+
+/* Force all cards to use theme variables */
+body.dark-mode .career-card,
+body.dark-mode .top3-card,
+body.dark-mode .profile-box,
+body.dark-mode .info-card,
+body.dark-mode .resource-card,
+body.dark-mode .task-card,
+body.dark-mode .modal-card,
+body.dark-mode .career-modal-content,
+body.dark-mode .career-graph-card {
+  background: var(--bg-card) !important;
+  color: var(--text-main) !important;
+}
+
+/* Fix ALL headings inside cards */
+body.dark-mode .career-card h1,
+body.dark-mode .career-card h2,
+body.dark-mode .career-card h3,
+body.dark-mode .career-card h4,
+body.dark-mode .top3-card h3,
+body.dark-mode .profile-box h2,
+body.dark-mode .info-card h4,
+body.dark-mode .career-graph-card h3,
+body.dark-mode .career-graph-card h4 {
+  color: var(--text-main) !important;
+}
+
+/* Fix paragraph & span text inside cards */
+body.dark-mode .career-card p,
+body.dark-mode .top3-card p,
+body.dark-mode .profile-item span,
+body.dark-mode .profile-item strong,
+body.dark-mode .info-card p,
+body.dark-mode .metric span,
+body.dark-mode .metric strong {
+  color: var(--text-muted) !important;
+}
+
+/* Fix light backgrounds used inside cards */
+body.dark-mode .profile-item,
+body.dark-mode .skill-gap-simple li,
+body.dark-mode .bar-track,
+body.dark-mode .road-step,
+body.dark-mode .company-card {
+  background: var(--bg-muted) !important;
+}
+
+/* Fix bar chart labels */
+body.dark-mode .bar-label,
+body.dark-mode .bar-value {
+  color: var(--text-main) !important;
+}
+
+
+
+
+
+
+
+
+
+/* =========================================================
+   GLOBAL DARK MODE CONTENT VISIBILITY FIX (ALL PAGES)
+   ========================================================= */
+
+/* Any card-like container should keep readable text */
+/* body.dark-mode .page-content > div,
+body.dark-mode .page-content section,
+body.dark-mode .page-content article {
+  background: var(--bg-card);
+} */
+
+/* Force headings inside content cards to stay DARK */
+/* body.dark-mode .page-content h1,
+body.dark-mode .page-content h2,
+body.dark-mode .page-content h3,
+body.dark-mode .page-content h4 {
+  color: #0f172a !important;
+} */
+
+/* Paragraphs and labels inside cards */
+/* body.dark-mode .page-content p,
+body.dark-mode .page-content span,
+body.dark-mode .page-content li {
+  color: #334155 !important;
+} */
+body.dark-mode .page-content,
+body.dark-mode .result-page,
+body.dark-mode .container {
+  background: transparent !important;
+}
+
+/* Pills / badges / tags */
+body.dark-mode .badge,
+body.dark-mode .pill,
+body.dark-mode .tag {
+  background: #e5e7eb;
+  color: #0f172a;
+}
+
+/* Progress bars / indicators */
+body.dark-mode .progress-bar,
+body.dark-mode .progress-fill {
+  background-color: var(--primary);
+}
+
+/* Charts & SVG labels */
+body.dark-mode svg text {
+  fill: #0f172a !important;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<div class="navbar">
+
+  <div class="nav-left">
+    <a href="/overview">← Back</a>
+  </div>
+
+  <div class="nav-center">
+    <a href="/overview" class="{% if active=='overview' %}active{% endif %}">Overview</a>
+    <a href="/career-paths" class="{% if active=='career' %}active{% endif %}">Career Paths</a>
+    <a href="/skills-analysis" class="{% if active=='skills' %}active{% endif %}">Skills Analysis</a>
+    <a href="/strengths" class="{% if active=='strengths' %}active{% endif %}">Strengths</a>
+    <a href="/roadmap" class="{% if active=='roadmap' %}active{% endif %}">Roadmap</a>
+    <a href="/ai-insights" class="{% if active=='ai' %}active{% endif %}">AI Insights</a>
+
+    <!-- <button id="themeToggle" class="theme-toggle">🌙</button> -->
+  </div>
+
+  <div class="nav-right">
+    <a href="/what-if" class="whatif-btn">What-If</a>
+  </div>
+
+</div>
+
+<!-- ===== PAGE BODY ===== -->
+<div class="page-content">
+  {% block content %}{% endblock %}
+</div>
+
+<!-- ===== DARK MODE SCRIPT ===== -->
+<script>
+const toggleBtn = document.getElementById("themeToggle");
+const body = document.body;
+
+// // Load preference
+// if (localStorage.getItem("theme") === "dark") {
+//   body.classList.add("dark-mode");
+//   toggleBtn.textContent = "☀️";
+// }
+
+// Toggle handler
+// toggleBtn.onclick = () => {
+//   body.classList.toggle("dark-mode");
+
+//   if (body.classList.contains("dark-mode")) {
+//     localStorage.setItem("theme", "dark");
+//     toggleBtn.textContent = "☀️";
+//   } else {
+//     localStorage.setItem("theme", "light");
+//     toggleBtn.textContent = "🌙";
+//   }
+// };
+
+</script>
+
+</body>
+</html>

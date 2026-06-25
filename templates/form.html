@@ -1,0 +1,337 @@
+{% if form_data %}
+<div class="whatif-banner">
+    🔁 What-If Mode: Modify inputs to explore alternate career outcomes
+</div>
+{% endif %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Career Analysis</title>
+
+<style>
+/* ---------- GLOBAL ---------- */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Segoe UI", system-ui, sans-serif;
+    background: #f5f7fb;
+    color: #1f2937;
+}
+
+h1 { font-size: 32px; margin-bottom: 8px; }
+h2 { margin-top: 40px; font-size: 22px; }
+label { font-weight: 600; margin-bottom: 6px; display: block; }
+
+.subtitle {
+    color: #6b7280;
+    margin-bottom: 30px;
+}
+
+/* ---------- CONTAINER ---------- */
+.form-container {
+    max-width: 980px;
+    margin: 40px auto;
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 18px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+}
+
+/* ---------- GRID ---------- */
+.grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 20px;
+}
+
+/* ---------- INPUTS ---------- */
+input[type="text"],
+select {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid #d1d5db;
+    background: #f9fafb;
+    font-size: 15px;
+}
+
+select:focus,
+input:focus {
+    outline: none;
+    border-color: #4f46e5;
+}
+
+/* ---------- SLIDERS ---------- */
+.slider-field {
+    margin-top: 14px;
+}
+
+input[type="range"] {
+    width: 100%;
+    appearance: none;
+    height: 6px;
+    border-radius: 999px;
+    background: linear-gradient(90deg,#4f46e5 0%,#4f46e5 50%,#e5e7eb 50%);
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    background: #4f46e5;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+/* ---------- BUTTON ---------- */
+button {
+    width: 100%;
+    margin-top: 40px;
+    padding: 16px;
+    font-size: 17px;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(90deg,#4f46e5,#6366f1);
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.95;
+}
+
+/* ---------- WHAT IF ---------- */
+.whatif-banner {
+    background: #eef2ff;
+    color: #3730a3;
+    padding: 14px;
+    text-align: center;
+    font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="form-container">
+
+<h1>Start Your Career Analysis</h1>
+<p class="subtitle">
+Enter your details and our Random Forest AI model will predict your ideal career path
+</p>
+
+<form action="/predict" method="post">
+
+<!-- ================= BASIC INFO ================= -->
+<h2>Basic Information</h2>
+
+<div class="grid-2">
+    <div>
+        <label>Full Name</label>
+        <input type="text" name="full_name"
+               value="{{ form_data.full_name if form_data else '' }}"
+               placeholder="e.g. Ravi Kumar" required>
+    </div>
+
+    <div>
+        <label>Education Level</label>
+        <select name="education_level">
+            <option value="UG" {% if form_data and form_data.education_level=='UG' %}selected{% endif %}>UG</option>
+            <option value="PG" {% if form_data and form_data.education_level=='PG' %}selected{% endif %}>PG</option>
+        </select>
+    </div>
+</div>
+
+<div class="grid-2">
+    <div>
+        <label>Stream</label>
+        <select name="stream">
+            {% for s in ["CS","IT","ECE","EEE","ME","Civil"] %}
+            <option value="{{s}}" {% if form_data and form_data.stream==s %}selected{% endif %}>{{s}}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="slider-field">
+        <label>CGPA: <span id="gpaVal">{{ form_data.gpa if form_data else 7.5 }}</span></label>
+        <input type="range" name="gpa" min="5" max="10" step="0.1"
+               value="{{ form_data.gpa if form_data else 7.5 }}"
+               oninput="gpaVal.innerText=this.value">
+    </div>
+</div>
+
+<!-- ================= TECH SKILLS ================= -->
+<h2>Technical Skills</h2>
+
+<div class="grid-2">
+    <div class="slider-field">
+        <label>Programming Score: <span id="progVal">{{ form_data.programming_score if form_data else 0 }}</span>%</label>
+        <input type="range" name="programming_score" min="0" max="100"
+               value="{{ form_data.programming_score if form_data else 0 }}"
+               oninput="progVal.innerText=this.value">
+    </div>
+
+    <div class="slider-field">
+        <label>Python Skill: <span id="pyVal">{{ form_data.python_skill if form_data else 0 }}</span>/10</label>
+        <input type="range" name="python_skill" min="0" max="10"
+               value="{{ form_data.python_skill if form_data else 0 }}"
+               oninput="pyVal.innerText=this.value">
+    </div>
+</div>
+
+<div class="grid-2">
+    <div class="slider-field">
+        <label>Web Development Skill: <span id="webVal">{{ form_data.web_dev_skill if form_data else 0 }}</span>/10</label>
+        <input type="range" name="web_dev_skill" min="0" max="10"
+               value="{{ form_data.web_dev_skill if form_data else 0 }}"
+               oninput="webVal.innerText=this.value">
+    </div>
+
+    <div class="slider-field">
+        <label>ML Skill: <span id="mlVal">{{ form_data.ml_skill if form_data else 0 }}</span>/10</label>
+        <input type="range" name="ml_skill" min="0" max="10"
+               value="{{ form_data.ml_skill if form_data else 0 }}"
+               oninput="mlVal.innerText=this.value">
+    </div>
+</div>
+
+<div class="slider-field">
+    <label>Data Analysis Skill: <span id="daVal">{{ form_data.data_analysis_skill if form_data else 0 }}</span>/10</label>
+    <input type="range" name="data_analysis_skill" min="0" max="10"
+           value="{{ form_data.data_analysis_skill if form_data else 0 }}"
+           oninput="daVal.innerText=this.value">
+</div>
+
+<!-- ================= CORE ================= -->
+<h2>Core Competencies</h2>
+
+<div class="grid-2">
+    <div class="slider-field">
+        <label>Overall Technical Skills: <span id="techVal">{{ form_data.technical_skill if form_data else 0 }}</span>%</label>
+        <input type="range" name="technical_skill" min="0" max="100"
+               value="{{ form_data.technical_skill if form_data else 0 }}"
+               oninput="techVal.innerText=this.value">
+    </div>
+
+    <div class="slider-field">
+        <label>Problem Solving Ability: <span id="psVal">{{ form_data.problem_solving if form_data else 0 }}</span>%</label>
+        <input type="range" name="problem_solving" min="0" max="100"
+               value="{{ form_data.problem_solving if form_data else 0 }}"
+               oninput="psVal.innerText=this.value">
+    </div>
+</div>
+
+<div class="grid-2">
+    <div class="slider-field">
+        <label>Math / Aptitude: <span id="mathVal">{{ form_data.math_score if form_data else 0 }}</span>%</label>
+        <input type="range" name="math_score" min="0" max="100"
+               value="{{ form_data.math_score if form_data else 0 }}"
+               oninput="mathVal.innerText=this.value">
+    </div>
+
+    <div class="slider-field">
+        <label>Projects Done: <span id="projVal">{{ form_data.projects_done if form_data else 0 }}</span></label>
+        <input type="range" name="projects_done" min="0" max="10"
+               value="{{ form_data.projects_done if form_data else 0 }}"
+               oninput="projVal.innerText=this.value">
+    </div>
+</div>
+
+<!-- ================= PRACTICE ================= -->
+<h2>Practice & Exposure</h2>
+
+<div class="grid-2">
+    <div class="slider-field">
+        <label>Weekly Coding Hours: <span id="hrsVal">{{ form_data.hours_per_week if form_data else 0 }}</span></label>
+        <input type="range" name="hours_per_week" min="0" max="40"
+               value="{{ form_data.hours_per_week if form_data else 0 }}"
+               oninput="hrsVal.innerText=this.value">
+    </div>
+
+    <div class="slider-field">
+        <label>Internship Duration (months): <span id="intVal">{{ form_data.internship_months if form_data else 0 }}</span></label>
+        <input type="range" name="internship_months" min="0" max="24"
+               value="{{ form_data.internship_months if form_data else 0 }}"
+               oninput="intVal.innerText=this.value">
+    </div>
+</div>
+
+<div class="grid-2">
+    <div>
+        <label>Internship Experience</label>
+        <select name="internship_experience">
+            <option value="0" {% if form_data and form_data.internship_experience==0 %}selected{% endif %}>No</option>
+            <option value="1" {% if form_data and form_data.internship_experience==1 %}selected{% endif %}>Yes</option>
+        </select>
+    </div>
+
+    <div>
+        <label>Certifications Completed</label>
+        <select name="certifications">
+            <option value="0">None</option>
+            <option value="1">1–2</option>
+            <option value="2">3–5</option>
+            <option value="3">More than 5</option>
+        </select>
+    </div>
+</div>
+
+<!-- ================= SOFT SKILLS ================= -->
+<h2>Soft Skills</h2>
+
+<div class="grid-2">
+    <div class="slider-field">
+        <label>Leadership Skill: <span id="leadVal">{{ form_data.leadership if form_data else 0 }}</span>%</label>
+        <input type="range" name="leadership" min="0" max="100"
+               value="{{ form_data.leadership if form_data else 0 }}"
+               oninput="leadVal.innerText=this.value">
+    </div>
+
+    <div class="slider-field">
+        <label>Teamwork Skill: <span id="teamVal">{{ form_data.teamwork if form_data else 0 }}</span>%</label>
+        <input type="range" name="teamwork" min="0" max="100"
+               value="{{ form_data.teamwork if form_data else 0 }}"
+               oninput="teamVal.innerText=this.value">
+    </div>
+</div>
+
+<div class="slider-field">
+    <label>Communication Skill: <span id="commVal">{{ form_data.communication_skill if form_data else 0 }}</span>%</label>
+    <input type="range" name="communication_skill" min="0" max="100"
+           value="{{ form_data.communication_skill if form_data else 0 }}"
+           oninput="commVal.innerText=this.value">
+</div>
+
+<label>Hackathon Participation</label>
+<select name="hackathon_participation">
+    <option value="0">No</option>
+    <option value="1">Yes</option>
+</select>
+
+<button type="submit">Analyze My Career Path</button>
+
+</form>
+</div>
+
+<script>
+function updateSlider(slider) {
+    const min = slider.min || 0;
+    const max = slider.max || 100;
+    const val = slider.value;
+    const percent = ((val - min) / (max - min)) * 100;
+    slider.style.background =
+        `linear-gradient(90deg,#4f46e5 ${percent}%,#e5e7eb ${percent}%)`;
+}
+
+document.querySelectorAll('input[type="range"]').forEach(slider => {
+    updateSlider(slider);
+    slider.addEventListener('input', () => updateSlider(slider));
+});
+</script>
+
+</body>
+</html>

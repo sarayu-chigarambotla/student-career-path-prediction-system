@@ -1,0 +1,348 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+/* ===== PAGE LAYOUT ===== */
+.result-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+    text-align: center;
+}
+
+/* ===== TOP ICON ===== */
+.result-icon {
+    width: 90px;
+    height: 90px;
+    margin: 0 auto 16px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    color: white;
+}
+
+/* ===== HEADER ===== */
+.result-title {
+    font-size: 38px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.result-subtitle {
+    max-width: 700px;
+    margin: 0 auto 40px;
+    font-size: 16px;
+    color: #6b7280;
+}
+
+/* ===== PROFILE BOX ===== */
+.profile-box {
+    background: white;
+    border-radius: 18px;
+    padding: 28px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+    margin-bottom: 40px;
+    text-align: left;
+}
+
+.profile-box h2 {
+    margin-bottom: 20px;
+    font-size: 22px;
+}
+
+.profile-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.profile-item {
+    background: #f8fafc;
+    border-radius: 14px;
+    padding: 18px;
+}
+
+.profile-item span {
+    display: block;
+    font-size: 13px;
+    color: #6b7280;
+    margin-bottom: 6px;
+}
+
+.profile-item strong {
+    font-size: 18px;
+    color: #111827;
+}
+
+/* ===== TOP CAREER HERO ===== */
+.top-career-hero {
+    background: linear-gradient(135deg, #2563eb, #8b5cf6);
+    border-radius: 22px;
+    padding: 50px 30px;
+    color: white;
+    margin: 50px 0;
+    box-shadow: 0 20px 45px rgba(0,0,0,0.15);
+}
+
+.hero-label {
+    font-size: 14px;
+    opacity: 0.9;
+    margin-bottom: 10px;
+}
+
+.hero-title {
+    font-size: 48px;
+    font-weight: 800;
+    margin: 10px 0;
+}
+
+.hero-domain {
+    font-size: 16px;
+    opacity: 0.95;
+}
+
+.hero-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255,255,255,0.18);
+    padding: 14px 24px;
+    border-radius: 999px;
+    margin: 28px 0;
+    font-size: 16px;
+}
+
+.hero-pill strong {
+    font-size: 20px;
+}
+
+.hero-desc {
+    max-width: 600px;
+    margin: 0 auto;
+    font-size: 16px;
+    opacity: 0.95;
+}
+
+/* ===== TOP 3 CAREERS ===== */
+.top3-section {
+    margin-top: 60px;
+}
+
+.top3-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+}
+
+.top3-card {
+    background: white;
+    border-radius: 18px;
+    padding: 24px;
+    text-align: left;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+    position: relative;
+}
+
+.top3-card.top {
+    border: 2px solid #6366f1;
+}
+
+.rank-badge {
+    position: absolute;
+    top: 18px;
+    left: 18px;
+    background: #2563eb;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.percent {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    font-size: 22px;
+    font-weight: 700;
+    color: #2563eb;
+}
+
+.top3-card h3 {
+    margin-top: 60px;
+    font-size: 20px;
+}
+
+.top3-card p {
+    color: #6b7280;
+}
+
+/* ===== SKILL GAP ===== */
+.skill-gap-simple {
+    margin: 50px auto;
+    max-width: 600px;
+    text-align: left;
+}
+
+.skill-gap-simple ul {
+    list-style: none;
+    padding: 0;
+}
+
+.skill-gap-simple li {
+    display: flex;
+    justify-content: space-between;
+    padding: 14px 18px;
+    background: #f8fafc;
+    border-radius: 12px;
+    margin-bottom: 10px;
+}
+
+/* ===== CTA ===== */
+.cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 40px;
+    padding: 16px 30px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #2563eb, #8b5cf6);
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 35px rgba(0,0,0,0.25);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+    .profile-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .top3-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-title {
+        font-size: 36px;
+    }
+}
+</style>
+
+
+<div class="result-page">
+    
+
+    <!-- TOP ICON -->
+    <div class="result-icon">
+        🏅
+    </div>
+
+    <!-- HEADER -->
+    <h1 class="result-title">Career Analysis Complete</h1>
+    <p class="result-subtitle">
+        Based on Random Forest analysis of your profile, we've identified your optimal career paths
+    </p>
+
+    <!-- STUDENT PROFILE SUMMARY -->
+    <div class="profile-box">
+        <h2>👤 Student Profile Summary</h2>
+
+        <div class="profile-grid">
+            <div class="profile-item">
+                <span>Name</span>
+                <strong>{{ student_name }}</strong>
+            </div>
+
+            <div class="profile-item">
+                <span>CGPA</span>
+                <strong>{{ gpa }}</strong>
+            </div>
+
+            <div class="profile-item">
+                <span>Internship</span>
+                <strong>{{ internship_months }} months</strong>
+            </div>
+
+            <div class="profile-item">
+                <span>Coding Practice</span>
+                <strong>{{ coding_hours }} hrs/week</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOP CAREER BANNER -->
+<!-- TOP CAREER PATH -->
+<div class="top-career-hero">
+    <p class="hero-label">Top Recommended Career Path</p>
+
+    <h1 class="hero-title">{{ career }}</h1>
+
+    <p class="hero-domain">
+        📈 {{ domain }}
+    </p>
+
+    <div class="hero-pill">
+        <span>Success Probability</span>
+        <strong>{{ confidence }}%</strong>
+    </div>
+
+    <p class="hero-desc">
+        {{ career_description }}
+    </p>
+</div>
+
+
+    <!-- TOP 3 CAREERS -->
+    <div class="top3-section">
+        <div class="top3-grid">
+            {% for c in top_careers %}
+            <div class="top3-card {% if loop.index == 1 %}top{% endif %}">
+                <div class="rank-badge">#{{ loop.index }}</div>
+                <div class="percent">{{ c.prob }}%</div>
+                <h3>{{ c.name }}</h3>
+                <p>{{ c.domain }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- <div class="skill-gap-card"> -->
+    <!-- <h3>Skill Gap Analysis</h3> -->
+
+<!-- SKILL GAP ANALYSIS -->
+<!-- <div class="skill-gap-simple">
+    <h3>Skill Gap Analysis</h3>
+
+    {% if gaps %}
+        <ul>
+            {% for skill, value in gaps.items() %}
+                <li>
+                    <strong>{{ skill.replace('_',' ').title() }}</strong>
+                    <span>Improve by {{ value }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="no-gap">You are well prepared 🎉</p>
+    {% endif %}
+</div> -->
+
+    <!-- CTA -->
+    <a href="/career-paths" class="cta-btn">
+        Explore Career Paths in Detail →
+    </a>
+
+</div>
+
+
+{% endblock %}

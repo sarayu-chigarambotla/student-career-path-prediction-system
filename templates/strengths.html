@@ -1,0 +1,229 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+.page-header {
+    text-align: center;
+    margin: 40px 0;
+}
+
+.page-header h1 {
+    font-size: 36px;
+}
+
+.page-header p {
+    color: #6b7280;
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    max-width: 1000px;
+    margin: auto;
+}
+
+.summary-card {
+    padding: 28px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.summary-card.green {
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+}
+
+.summary-card.purple {
+    background: #f5f3ff;
+    border: 1px solid #ddd6fe;
+}
+
+.summary-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+}
+
+.green .summary-icon { background: #bbf7d0; color: #16a34a; }
+.purple .summary-icon { background: #ddd6fe; color: #7c3aed; }
+
+.section {
+    max-width: 1100px;
+    margin: 40px auto;
+}
+
+.section-title {
+    font-size: 24px;
+    margin-bottom: 12px;
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.skill-card {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 22px;
+    border: 1px solid #e5e7eb;
+}
+
+.skill-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+}
+
+.progress {
+    height: 10px;
+    background: #e5e7eb;
+    border-radius: 999px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.fill {
+    height: 100%;
+    background: linear-gradient(90deg, #22c55e, #4ade80);
+}
+
+.fill.low {
+    background: linear-gradient(90deg, #a855f7, #c084fc);
+}
+
+.tip-box {
+    background: #f8fafc;
+    border-radius: 20px;
+    padding: 26px;
+    border: 1px solid #e5e7eb;
+}
+
+.tip-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 20px;
+}
+</style>
+
+<!-- HEADER -->
+<div class="page-header">
+    <h1>Strengths & Improvement Areas</h1>
+    <p>Personalized analysis of your strong points and growth opportunities</p>
+</div>
+
+{% set strengths = [] %}
+{% set improvements = [] %}
+
+{% for name, val in skills.technical_skills.items() %}
+    {% if val >= 70 %}
+        {% set _ = strengths.append((name, val)) %}
+    {% else %}
+        {% set _ = improvements.append((name, val)) %}
+    {% endif %}
+{% endfor %}
+
+{% for name, val in skills.soft_skills.items() %}
+    {% if val >= 70 %}
+        {% set _ = strengths.append((name, val)) %}
+    {% else %}
+        {% set _ = improvements.append((name, val)) %}
+    {% endif %}
+{% endfor %}
+
+<!-- SUMMARY -->
+<div class="summary-grid">
+    <div class="summary-card green">
+        <div class="summary-icon">✔</div>
+        <div>
+            <h2>{{ strengths|length }}</h2>
+            <p>Strong Areas Identified</p>
+        </div>
+    </div>
+
+    <div class="summary-card purple">
+        <div class="summary-icon">📈</div>
+        <div>
+            <h2>{{ improvements|length }}</h2>
+            <p>Growth Opportunities</p>
+        </div>
+    </div>
+</div>
+
+<!-- STRENGTHS -->
+<div class="section">
+    <h2 class="section-title">✔ Your Key Strengths</h2>
+
+    <div class="card-grid">
+        {% for name, val in strengths %}
+        <div class="skill-card">
+            <div class="skill-header">
+                <span>{{ name }}</span>
+                <span>{{ val }}%</span>
+            </div>
+            <div class="progress">
+                <div class="fill" style="width: {{ val }}%"></div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- IMPROVEMENTS -->
+<div class="section">
+    <h2 class="section-title">⚠ Areas for Improvement</h2>
+
+    {% for name, val in improvements %}
+    <div class="skill-card" style="margin-bottom:20px;">
+        <div class="skill-header">
+            <span>{{ name }}</span>
+            <span>{{ val }}%</span>
+        </div>
+        <div class="progress">
+            <div class="fill low" style="width: {{ val }}%"></div>
+        </div>
+
+        <p style="margin-top:10px;color:#6b7280;">
+            Focus on improving {{ name|lower }} through practice and guided learning.
+        </p>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- PRO TIPS -->
+<div class="section tip-box">
+    <h2>💡 Pro Tips for Growth</h2>
+
+    <div class="tip-grid">
+        <div>
+            <strong>Leverage Your Strengths</strong>
+            <p>Use your strong areas to stand out in interviews and projects.</p>
+        </div>
+
+        <div>
+            <strong>Targeted Improvement</strong>
+            <p>Improve one weak area at a time for maximum progress.</p>
+        </div>
+
+        <div>
+            <strong>Track Progress</strong>
+            <p>Use the What-If analysis to see how improvements affect predictions.</p>
+        </div>
+
+        <div>
+            <strong>Seek Feedback</strong>
+            <p>Mentors and peers can accelerate your skill development.</p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
